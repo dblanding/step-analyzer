@@ -3,7 +3,7 @@
 # Copyright 2020 Doug Blanding (dblanding@gmail.com)
 #
 # The latest  version of this file can be found at:
-# //https://github.com/dblanding/step_analyzer
+# //https://github.com/dblanding/step-analyzer
 #
 # stepanalyzer is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
