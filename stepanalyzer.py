@@ -19,8 +19,9 @@
 # if not, write to the Free Software Foundation, Inc.
 # 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-"""A tool to read a step file and analyze its hierarchical structure,
-then generate an indented text outline representation thereof."""
+"""A tool which examines the hierarchical structure of a TDocStd_Document
+containing CAD data in OCAF format, either loaded directly or read from a
+STEP file. The structure is presented as an indented text outline."""
 
 from OCC.Core.IFSelect import IFSelect_RetDone
 from OCC.Core.STEPCAFControl import STEPCAFControl_Reader
@@ -32,15 +33,22 @@ from OCC.Core.XCAFDoc import XCAFDoc_DocumentTool_ShapeTool
 
 
 class StepAnalyzer():
-    """A class that reads a step file and analyzes its structure."""
+    """A class that analyzes the structure of an OCAF document."""
 
-    def __init__(self, fname):
+    def __init__(self, document=None, filename=None):
+        """Supply one or the other: document or STEP filename."""
 
-        self.fname = fname
         self.uid = 1
         self.indent = 0
         self.output = ""
-        self.read_file(fname)
+        self.fname = filename
+        if filename:
+            self.doc = self.read_file(filename)
+        elif document:
+            self.doc = document
+            self.shape_tool = XCAFDoc_DocumentTool_ShapeTool(self.doc.Main())
+        else:
+            print("Supply one or the other: document or STEP filename.")
 
     def read_file(self, fname):
         """Read STEP file and return <TDocStd_Document>."""
@@ -70,7 +78,10 @@ class StepAnalyzer():
         Component Name [entry] => Referred Label Name [entry]
         Components are shown indented w/r/t line above."""
 
-        self.output += f"Assembly structure of file: {self.fname}\n\n"
+        if self.fname:
+            self.output += f"Assembly structure of file: {self.fname}\n\n"
+        else:
+            self.output += "Assembly structure of doc:\n\n"
         self.indent = 0
 
         # Find root label of step doc
@@ -132,8 +143,8 @@ class StepAnalyzer():
         self.indent -= 1
 
 if __name__ == "__main__":
-    SA = StepAnalyzer("step/as1-oc-214.stp")
+    SA = StepAnalyzer(filename="step/as1-oc-214.stp")
     print(SA.dump())
     # The step file below doesn't get sorted out as neatly as the one above.
-    #SA2 = StepAnalyzer("step/as1_pe_203.stp")
+    #SA2 = StepAnalyzer(filename="step/as1_pe_203.stp")
     #print(SA2.dump())
