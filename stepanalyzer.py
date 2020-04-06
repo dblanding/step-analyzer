@@ -145,6 +145,6 @@ class StepAnalyzer():
 if __name__ == "__main__":
     SA = StepAnalyzer(filename="step/as1-oc-214.stp")
     print(SA.dump())
-    # The step file below doesn't get sorted out as neatly as the one above.
-    #SA2 = StepAnalyzer(filename="step/as1_pe_203.stp")
-    #print(SA2.dump())
+
+    SA2 = StepAnalyzer(filename="step/as1_pe_203.stp")
+    print(SA2.dump())
